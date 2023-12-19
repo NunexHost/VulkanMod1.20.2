@@ -23,7 +23,7 @@ public class ResettableQueue<T> implements Iterable<T> {
     }
 
     public boolean hasNext() {
-        return this.position < this.limit;
+        return position < limit;
     }
 
     public T poll() {
@@ -38,9 +38,7 @@ public class ResettableQueue<T> implements Iterable<T> {
             return;
 
         if(limit == capacity) resize();
-        this.queue[limit] = t;
-
-        this.limit++;
+        this.queue[limit++] = t;
     }
 
     @SuppressWarnings("unchecked")
@@ -50,7 +48,7 @@ public class ResettableQueue<T> implements Iterable<T> {
         T[] oldQueue = this.queue;
         this.queue = (T[])(new Object[capacity]);
 
-        System.arraycopy(oldQueue, 0, this.queue, 0, oldQueue.length);
+        System.arraycopy(oldQueue, 0, this.queue, 0, position);
     }
 
     public int size() {
@@ -63,34 +61,22 @@ public class ResettableQueue<T> implements Iterable<T> {
     }
 
     public Iterator<T> iterator(boolean reverseOrder) {
-        return reverseOrder ? new Iterator<>() {
-            int pos = ResettableQueue.this.limit - 1;
-            final int limit = -1;
+        return reverseOrder ?
+                () -> {
+                    int pos = limit - 1;
 
-            @Override
-            public boolean hasNext() {
-                return pos > limit;
-            }
+                    while (pos >= 0) {
+                        yield queue[pos--];
+                    }
+                }
+                :
+                () -> {
+                    int pos = 0;
 
-            @Override
-            public T next() {
-                return queue[pos--];
-            }
-        }
-                : new Iterator<>() {
-            int pos = 0;
-            final int limit = ResettableQueue.this.limit;
-
-            @Override
-            public boolean hasNext() {
-                return pos < limit;
-            }
-
-            @Override
-            public T next() {
-                return queue[pos++];
-            }
-        };
+                    while (pos < limit) {
+                        yield queue[pos++];
+                    }
+                };
     }
 
     @NotNull
@@ -101,9 +87,8 @@ public class ResettableQueue<T> implements Iterable<T> {
 
     @Override
     public void forEach(Consumer<? super T> action) {
-        for(int i = 0; i < this.limit; ++i) {
-            action.accept(this.queue[i]);
+        for (int i = 0; i < limit; i++) {
+            action.accept(queue[i]);
         }
-
     }
 }
