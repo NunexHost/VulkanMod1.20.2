@@ -1,6 +1,5 @@
 package net.vulkanmod.mixin.screen;
 
-import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.Options;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.screens.OptionsScreen;
