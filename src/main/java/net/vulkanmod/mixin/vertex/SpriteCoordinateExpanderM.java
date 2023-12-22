@@ -27,19 +27,11 @@ public class SpriteCoordinateExpanderM implements ExtendedVertexBuilder {
 
     @Override
     public void vertex(float x, float y, float z, int packedColor, float u, float v, int overlay, int light, int packedNormal) {
+        // Cache sprite coordinates
+        float cachedU = this.sprite.getU(u);
+        float cachedV = this.sprite.getV(v);
 
-        // Cache the u and v coordinates for direct access.
-        float u0 = this.sprite.getU(u);
-        float v0 = this.sprite.getV(v);
-
-        // Optimize access to the `TextureAtlasSprite` object.
-        TextureAtlasSprite sprite = this.sprite;
-
-        // Calculate the final texture coordinates.
-        float u1 = u0 / sprite.getWidth();
-        float v1 = v0 / sprite.getHeight();
-
-        // Pass the optimized coordinates to the delegate.
-        this.extDelegate.vertex(x, y, z, packedColor, u1, v1, overlay, light, packedNormal);
+        // Use cached coordinates
+        this.extDelegate.vertex(x, y, z, packedColor, cachedU, cachedV, overlay, light, packedNormal);
     }
 }
