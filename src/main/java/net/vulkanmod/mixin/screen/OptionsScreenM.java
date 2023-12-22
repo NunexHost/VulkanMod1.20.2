@@ -25,25 +25,8 @@ public class OptionsScreenM extends Screen {
         super(title);
     }
 
-    /**
-     * Lazy loads OptionScreenV components.
-     */
     @Inject(method = "method_19828", at = @At("HEAD"), cancellable = true)
     private void injectVideoOptionScreen(CallbackInfoReturnable<Screen> cir) {
-        // Only create the OptionScreenV when it's needed.
-        if (!cir.isCancellable()) {
-            OptionScreenV optionScreenV = new OptionScreenV(Component.literal("Video Setting"), this);
-            cir.setReturnValue(optionScreenV);
-        }
-    }
-
-    /**
-     * Caches frequently used GUI components or data.
-     */
-    @Inject(method = "method_19828", at = @At("RETURN"))
-    private void injectVideoOptionScreenPost(CallbackInfoReturnable<Screen> cir) {
-        // Cache the Options instance for direct access.
-        OptionScreenV optionScreenV = (OptionScreenV) cir.getReturnValue();
-        optionScreenV.options = this.options;
+        cir.setReturnValue(new OptionScreenV(Component.literal("Video Setting"), this));
     }
 }
