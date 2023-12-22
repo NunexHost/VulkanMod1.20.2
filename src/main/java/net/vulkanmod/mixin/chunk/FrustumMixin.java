@@ -20,14 +20,13 @@ public class FrustumMixin implements FrustumMixed {
 
     @Inject(method = "calculateFrustum", at = @At("HEAD"), cancellable = true)
     private void calculateFrustum(Matrix4f modelView, Matrix4f projection, CallbackInfo ci) {
-//        this.vFrustum = new VFrustum(modelView, projection);
-        this.vFrustum.calculateFrustum(modelView, projection);
+        vFrustum.calculateFrustum(modelView, projection);
         ci.cancel();
     }
 
-    @Inject(method = "prepare", at = @At("RETURN"))
-    public void prepare(double d, double e, double f, CallbackInfo ci) {
-        this.vFrustum.setCamOffset(this.camX, this.camY, this.camZ);
+    @Inject(method = "prepare", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/culling/Frustum;setPosition(DDD)V"))
+    private void setCamOffset(double x, double y, double z, CallbackInfo ci) {
+        vFrustum.setCamOffset(x, y, z); // Align with cam offset setting
     }
 
     @Override
