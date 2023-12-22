@@ -4,7 +4,7 @@ import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.screens.OptionsScreen;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
-import net.minecraft.client.options.GameOptions; // Updated for 1.20.2
+import net.minecraft.client.options.GameOptions; // Correct import for 1.20.2
 import net.vulkanmod.config.OptionScreenV;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
